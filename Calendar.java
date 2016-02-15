@@ -20,15 +20,45 @@ public class Calendar
 		
 		Duplicate appointments are allowed.*/
 		Appointment newAppointment  = new Appointment(description,duration);
-		Appointment monthPointer = getMonthAppointment(month);
-		Appointment dayPointer = getDayAppointment(day);
-		
-		
-		if (dayPointer == null)
-			dayPointer = newAppointment;
+		newAppointment.day = day;
+		newAppointment.month = month;
+		Appointment monthPointer = getMonthAppointment(month);		
+
+		while (monthPointer != null && monthPointer.day != day)
+		{
+			monthPointer = monthPointer.right;
+		}
 		
 		if (monthPointer == null)
-			monthPointer = newAppointment;
+			switch (month)
+			{
+				case "January": months[0] = newAppointment;
+				break;
+				case "February": months[1] = newAppointment;
+				break;
+				case "March": months[2] = newAppointment;
+				break;
+				case "April": months[3] = newAppointment;
+				break;
+				case "May": months[4] = newAppointment;
+				break;
+				case "June": months[5] = newAppointment;
+				break;
+				case "July": months[6] = newAppointment;
+				break;
+				case "August": months[7] = newAppointment;
+				break;
+				case "September": months[8] = newAppointment;
+				break;
+				case "October": months[9] = newAppointment;
+				break;
+				case "November": months[10] = newAppointment;
+				break;
+				case "December": months[10] = newAppointment;
+				break;
+		}
+
+ 	
 	}
 	
 	/*Deletion methods*/
@@ -77,18 +107,16 @@ public class Calendar
 	public Appointment getAppointment(String month, int day)
 	{
 		/*Return the head appointment of the month and day combination.  If no such appointment exists, return null*/
-		
-		Appointment monthPointer  = getMonthAppointment(month);
-		Appointment dayPointer  = getDayAppointment(day);
-		Appointment appointmentPointer; 
-		while (monthPointer != dayPointer)
-			monthPointer = monthPointer.right;
-			while (monthPointer != dayPointer || dayPointer != null)
-				dayPointer = dayPointer.down;
-			
-		if (dayPointer != null)
-			System.out.println(dayPointer.getDescription());
-		return dayPointer;
+		Appointment monthAppointment = getMonthAppointment(month);
+		while (monthAppointment != null && monthAppointment.day != day)
+		{
+			monthAppointment = monthAppointment.right;
+		}
+		if (monthAppointment == null)
+			 return null;	
+		else
+			return monthAppointment;
+
 	}
 	
 	public Appointment getMonthAppointment(String month)

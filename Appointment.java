@@ -46,6 +46,8 @@ public class Appointment
 		return duration;
 	}
 	
+	public int getDay() {return day;}
+	public String getMonth() { return month; }
 	
 	public Appointment back;//The next appointment (back) of this appointment on the same date
 	public Appointment right;//The next appointment (right) of this appointment in the same week.
@@ -54,5 +56,6 @@ public class Appointment
 	//Appointment particulars:
 	private String description;//A description for this appointment.
 	private int duration;//The number of hours that the appointment will last.
-	
+	protected int day;
+	protected String month;	
 }

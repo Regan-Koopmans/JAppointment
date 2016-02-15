@@ -119,8 +119,10 @@ public class Diary
 	public static void main(String[] args)
 	{
 		//Write code to test your implementation here.
-		
-		int mark = Diary.trivialInserts(0);
+		Calendar myCalendar = new Calendar();
+		myCalendar.addAppointment("February",1,"test",3);
+		System.out.println(myCalendar.getAppointment("January",1));
+		//int mark = Diary.trivialInserts(0);
 	}
 	
 	static String months[] = new String[]{"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
