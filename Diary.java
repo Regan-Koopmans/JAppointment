@@ -121,7 +121,8 @@ public class Diary
 		//Write code to test your implementation here.
 		Calendar myCalendar = new Calendar();
 		myCalendar.addAppointment("February",1,"test",3);
-		System.out.println(myCalendar.getAppointment("January",1));
+		myCalendar.addAppointment("February",8,"hbd",2);
+		System.out.println(myCalendar.getAppointment("February",8).getDescription());
 		//int mark = Diary.trivialInserts(0);
 	}
 	

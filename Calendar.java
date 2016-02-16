@@ -24,12 +24,13 @@ public class Calendar
 		newAppointment.month = month;
 		Appointment monthPointer = getMonthAppointment(month);		
 
-		while (monthPointer != null && monthPointer.day != day)
+		while (monthPointer != null && monthPointer.day < day)
 		{
 			monthPointer = monthPointer.right;
 		}
 		
 		if (monthPointer == null)
+		{
 			switch (month)
 			{
 				case "January": months[0] = newAppointment;
@@ -56,9 +57,23 @@ public class Calendar
 				break;
 				case "December": months[10] = newAppointment;
 				break;
+			}
+			return;
 		}
-
- 	
+		if (monthPointer.day == day)
+		{
+			while (monthPointer.back != null)
+				monthPointer = monthPointer.back;	
+		
+			monthPointer.back = newAppointment;
+		}
+		else
+		{
+			Appointment temp = monthPointer.right.right;
+			monthPointer.right = newAppointment;
+		}
+		Appointment dayPointer = getDayAppointment(day);
+		while (dayPointer != null && dayPointer.month
 	}
 	
 	/*Deletion methods*/
@@ -69,7 +84,7 @@ public class Calendar
 				
 		return null;
 	}
-	
+
 	public Appointment deleteAppointment(String month, int day, String description)
 	{
 		/*Delete the first appointment at the given month and day combination  with the description and return the deleted appointment.
