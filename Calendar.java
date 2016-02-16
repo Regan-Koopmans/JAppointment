@@ -34,7 +34,6 @@ public class Calendar
 
 			while (monthPointer.right != null && monthPointer.right.day < day && monthPointer.day != day)
 			{
-				System.out.println("->");
 				monthPointer = monthPointer.right;
 			}
 		
@@ -66,7 +65,7 @@ public class Calendar
 		Appointment dayPointer = getDayAppointment(day);
 		if (dayPointer == null)
 		{
-			dayPointer = newAppointment;
+			days[day] = newAppointment;
 			return;
 		}
 
@@ -121,7 +120,44 @@ public class Calendar
 	{
 		/*Delete the first appointment at the given month and day combination and return the deleted appointment.
 		If no such appointment exists, return null.*/
-				
+	
+		Appointment appointmentPointer = getAppointment(month,day);
+		Appointment monthPointer = getMonthAppointment(month);
+		Appointment dayPointer = getDayAppointment(day);
+		System.out.println(dayPointer);
+		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
+		{
+			if (monthPointer == appointmentPointer)
+			{
+				System.out.println("howdy");
+			}
+			else 
+			{
+				while (monthPointer.right != appointmentPointer)
+					monthPointer = monthPointer.right;				
+			}
+	
+			if (dayPointer == appointmentPointer)
+			{
+				System.out.println("hey there!");
+			}
+			else 
+			{
+				while (dayPointer.down != appointmentPointer)
+					dayPointer = dayPointer.down; 
+			}
+
+			
+			if (appointmentPointer.back != null)
+			{
+				Appointment temp = appointmentPointer;
+				appointmentPointer = appointmentPointer.back;
+				return temp;
+			}
+			dayPointer.down = dayPointer.down.down;
+			monthPointer.right = monthPointer.right.right;
+			return appointmentPointer;
+		}
 		return null;
 	}
 
@@ -129,7 +165,42 @@ public class Calendar
 	{
 		/*Delete the first appointment at the given month and day combination  with the description and return the deleted appointment.
 		If no such appointment exists, return null.*/
-				
+		Appointment appointmentPointer = getAppointment(month,day);
+		Appointment monthPointer = getMonthAppointment(month);
+		Appointment dayPointer = getDayAppointment(day);
+		System.out.println(dayPointer);
+		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
+		{
+			if (monthPointer == appointmentPointer)
+			{
+				System.out.println("howdy");
+			}
+			else 
+			{
+				while (monthPointer.right != appointmentPointer)
+					monthPointer = monthPointer.right;				
+			}
+	
+			if (dayPointer == appointmentPointer)
+			{
+				System.out.println("hey there!");
+			}
+			else 
+			{
+				while (dayPointer.down != appointmentPointer)
+					dayPointer = dayPointer.down; 
+			}
+			
+			if (appointmentPointer.back != null)
+			{
+				Appointment temp = appointmentPointer;
+				appointmentPointer = appointmentPointer.back;
+				return temp;
+			}
+			dayPointer.down = dayPointer.down.down;
+			monthPointer.right = monthPointer.right.right;
+			return appointmentPointer;
+		}
 		return null;
 	}
 	
@@ -140,7 +211,22 @@ public class Calendar
 		If the month has no appointments, simply do nothing.*/
 
 		Appointment monthPointer = getMonthAppointment(month);
-		
+		Appointment dayPointer = null;
+		for (int x = 0; x < 30; x++)
+		{
+			if (dayPointer != null)
+			{
+				dayPointer = getDayAppointment(x);
+				while (dayPointer.down != null && dayPointer.down.month != month)
+				{
+					dayPointer = dayPointer.down;		
+				}
+				if (dayPointer.down.month == month)
+					dayPointer.down = dayPointer.down.down;
+				 
+			}
+		}
+		months[convertToMonthEnum(month)] = null;
 	}
 	
 	public void clearMyDays(int day)
@@ -148,18 +234,28 @@ public class Calendar
 		/*All appointements for the given day should be deleted.
 		If the day has no appointments, simply do nothing.*/
 		Appointment monthPointer = null;
-
+		Appointment dayPointer = getDayAppointment(day);
 		for (int x = 0; x < 12; x++)
-		{
-			monthPointer = months[x];
-
+		{	
+			if (monthPointer != null)
+			{
+				System.out.println("not null");
+				monthPointer = months[x];
+				while (monthPointer.right != null && monthPointer.right.day != day)
+				{
+					monthPointer = monthPointer.right;
+				} 
+				if (monthPointer.right.day == day)
+					monthPointer.right = monthPointer.right.right;
+			}
 		}
+		days[day] = null;
 	}
 	
 	public void clearMyYear()
 	{
 		/*Delete all appointments from the calendar.*/
-		for (int x = 0; x < 31; x++)
+		for (int x = 0; x < 30; x++)
 			days[x] = null;
 		for (int x = 0; x < 12; x++)
 			months[x] = null;
@@ -187,7 +283,6 @@ public class Calendar
 		/*Return the head appointment for the month passed as a parameter.
 		If no such appointment exists, return null*/
 		Appointment monthAppointment = null;
-		
 		switch (month)
 		{
 			case "Jan": monthAppointment = months[0];
@@ -225,8 +320,6 @@ public class Calendar
 		else 
 			return null;
 	}
-	
 	Appointment [] days;
-	Appointment [] months;
-	
+	Appointment [] months;	
 }

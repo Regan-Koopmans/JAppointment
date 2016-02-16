@@ -122,14 +122,26 @@ public class Diary
 		Calendar myCalendar = new Calendar();
 		myCalendar.addAppointment("Feb",1,"test",3);
 		myCalendar.addAppointment("Feb",3,"hbd",2);
-		myCalendar.addAppointment("Feb",5,"middle",4);
+		myCalendar.addAppointment("Feb",2,"middle",4);
+		myCalendar.addAppointment("Mar",1,"mar",1);
 	
-		Appointment monthPointer = myCalendar.getMonthAppointment("Feb");
+		//Appointment monthPointer = myCalendar.getMonthAppointment("Feb");
+		//Appointment dayPointer = myCalendar.getDayAppointment(1);
+		//while (dayPointer != null)
+		//{
+		//	System.out.println(dayPointer.getDescription());
+		//	dayPointer = dayPointer.down;
+		//}
+		myCalendar.clearMyDays(1);
+		Appointment monthPointer = myCalendar.getMonthAppointment("Mar");
+		Appointment dayPointer = myCalendar.getDayAppointment(1);
+		System.out.println(dayPointer);
 		while (monthPointer != null)
 		{
 			System.out.println(monthPointer.getDescription());
 			monthPointer = monthPointer.right;
 		}
+		//myCalendar.deleteAppointment("Feb",3);
 		//int mark = Diary.trivialInserts(0);
 	}
 	
