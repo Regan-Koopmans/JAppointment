@@ -120,9 +120,16 @@ public class Diary
 	{
 		//Write code to test your implementation here.
 		Calendar myCalendar = new Calendar();
-		myCalendar.addAppointment("February",1,"test",3);
-		myCalendar.addAppointment("February",8,"hbd",2);
-		System.out.println(myCalendar.getAppointment("February",8).getDescription());
+		myCalendar.addAppointment("Feb",1,"test",3);
+		myCalendar.addAppointment("Feb",3,"hbd",2);
+		myCalendar.addAppointment("Feb",5,"middle",4);
+	
+		Appointment monthPointer = myCalendar.getMonthAppointment("Feb");
+		while (monthPointer != null)
+		{
+			System.out.println(monthPointer.getDescription());
+			monthPointer = monthPointer.right;
+		}
 		//int mark = Diary.trivialInserts(0);
 	}
 	

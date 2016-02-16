@@ -4,12 +4,13 @@ task BUT you are not allowed to remove or change the names or properties of any 
 
 Importing Java's built in data structures will result in a mark of 0.*/
 
+
 public class Calendar
 {
 	public Calendar()
 	{
 		/*You may implement this constructor to suit your needs, or you may add additional constructors.  This is the constructor which will be used for marking*/ 
-		days = new Appointment[31];
+		days = new Appointment[30];
 		months = new Appointment[12];
 	}
 	
@@ -24,56 +25,95 @@ public class Calendar
 		newAppointment.month = month;
 		Appointment monthPointer = getMonthAppointment(month);		
 
-		while (monthPointer != null && monthPointer.day < day)
-		{
-			monthPointer = monthPointer.right;
-		}
-		
 		if (monthPointer == null)
 		{
-			switch (month)
-			{
-				case "January": months[0] = newAppointment;
-				break;
-				case "February": months[1] = newAppointment;
-				break;
-				case "March": months[2] = newAppointment;
-				break;
-				case "April": months[3] = newAppointment;
-				break;
-				case "May": months[4] = newAppointment;
-				break;
-				case "June": months[5] = newAppointment;
-				break;
-				case "July": months[6] = newAppointment;
-				break;
-				case "August": months[7] = newAppointment;
-				break;
-				case "September": months[8] = newAppointment;
-				break;
-				case "October": months[9] = newAppointment;
-				break;
-				case "November": months[10] = newAppointment;
-				break;
-				case "December": months[10] = newAppointment;
-				break;
-			}
-			return;
-		}
-		if (monthPointer.day == day)
-		{
-			while (monthPointer.back != null)
-				monthPointer = monthPointer.back;	
-		
-			monthPointer.back = newAppointment;
+			months[convertToMonthEnum(month)] = newAppointment;
 		}
 		else
 		{
-			Appointment temp = monthPointer.right.right;
-			monthPointer.right = newAppointment;
+
+			while (monthPointer.right != null && monthPointer.right.day < day && monthPointer.day != day)
+			{
+				System.out.println("->");
+				monthPointer = monthPointer.right;
+			}
+		
+			if (monthPointer.day == day)
+			{
+				while (monthPointer.back != null)
+					monthPointer = monthPointer.back;
+
+				monthPointer.back = newAppointment;
+			}
+			else
+			{
+				if (monthPointer.right == null)
+				{
+					//System.out.println("APPEND INSERT");
+					monthPointer.right = newAppointment;
+				}
+				else
+				{
+					//System.out.println("MIDDLE INSERT");
+					Appointment temp = monthPointer.right;
+					monthPointer.right = newAppointment;
+					newAppointment.right = temp;
+				}
+			}
 		}
+		/////////////////////////////////////////
+
 		Appointment dayPointer = getDayAppointment(day);
-		while (dayPointer != null && dayPointer.month
+		if (dayPointer == null)
+		{
+			dayPointer = newAppointment;
+			return;
+		}
+
+		while (dayPointer.down != null && convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
+		{
+			dayPointer = dayPointer.right;
+		}
+		if (dayPointer == null)
+		{
+			dayPointer = newAppointment;
+			return;
+		}
+		Appointment temp = dayPointer.down;
+		dayPointer.down = newAppointment;
+		newAppointment.down = temp;
+	}
+
+	public int convertToMonthEnum(String month)
+	{
+		switch (month)
+			{
+				case "Jan": return 0;
+		
+				case "Feb": return 1;
+		
+				case "Mar": return 2;
+		
+				case "Apr": return 3;
+		
+				case "May": return 4;
+		
+				case "Jun": return 5;
+			
+				case "Jul": return 6;
+			
+				case "Aug": return 7;
+			
+				case "Sep": return 8;
+			
+				case "Oct": return 9;
+	
+				case "Nov": return 10;
+	
+				case "Dec": return 11;
+
+			}
+		return -1;
 	}
 	
 	/*Deletion methods*/
@@ -98,6 +138,8 @@ public class Calendar
 	{
 		/*All appointements for the given month should be deleted.
 		If the month has no appointments, simply do nothing.*/
+
+		Appointment monthPointer = getMonthAppointment(month);
 		
 	}
 	
@@ -105,7 +147,13 @@ public class Calendar
 	{
 		/*All appointements for the given day should be deleted.
 		If the day has no appointments, simply do nothing.*/
-		 months = null;
+		Appointment monthPointer = null;
+
+		for (int x = 0; x < 12; x++)
+		{
+			monthPointer = months[x];
+
+		}
 	}
 	
 	public void clearMyYear()
@@ -142,29 +190,29 @@ public class Calendar
 		
 		switch (month)
 		{
-			case "January": monthAppointment = months[0];
+			case "Jan": monthAppointment = months[0];
 			break;
-			case "February": monthAppointment = months[1];
+			case "Feb": monthAppointment = months[1];
 			break;
-			case "March": monthAppointment = months[2];
+			case "Mar": monthAppointment = months[2];
 			break;
-			case "April": monthAppointment = months[3];
+			case "Apr": monthAppointment = months[3];
 			break;
 			case "May": monthAppointment = months[4];
 			break;
-			case "June": monthAppointment = months[5];
+			case "Jun": monthAppointment = months[5];
 			break;
-			case "July": monthAppointment = months[6];
+			case "Jul": monthAppointment = months[6];
 			break;
-			case "August": monthAppointment = months[7];
+			case "Aug": monthAppointment = months[7];
 			break;
-			case "September": monthAppointment = months[8];
+			case "Sep": monthAppointment = months[8];
 			break;
-			case "October": monthAppointment = months[9];
+			case "Oct": monthAppointment = months[9];
 			break;
-			case "November": monthAppointment = months[10];
+			case "Nov": monthAppointment = months[10];
 			break;
-			case "December": monthAppointment = months[11];
+			case "Dec": monthAppointment = months[11];
 			break;
 		}
 		return monthAppointment;
