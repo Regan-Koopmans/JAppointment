@@ -120,10 +120,14 @@ public class Diary
 	{
 		//Write code to test your implementation here.
 		Calendar myCalendar = new Calendar();
-		myCalendar.addAppointment("Feb",1,"test",3);
-		myCalendar.addAppointment("Feb",3,"hbd",2);
-		myCalendar.addAppointment("Feb",2,"middle",4);
-		myCalendar.addAppointment("Mar",1,"mar",1);
+	//	myCalendar.addAppointment("Feb",1,"test",3);
+	//	myCalendar.addAppointment("Feb",3,"hbd",2);
+	//	myCalendar.addAppointment("Feb",2,"middle",4);
+		myCalendar.addAppointment("Mar",3,"outer insert",1);
+		myCalendar.addAppointment("Mar",1,"working now",1);
+
+	//	myCalendar.addAppointment("Mar",2,"should still be here",1);
+	//	myCalendar.addAppointment("Jul",1,"neither should this",1);
 	
 		//Appointment monthPointer = myCalendar.getMonthAppointment("Feb");
 		//Appointment dayPointer = myCalendar.getDayAppointment(1);
@@ -132,10 +136,10 @@ public class Diary
 		//	System.out.println(dayPointer.getDescription());
 		//	dayPointer = dayPointer.down;
 		//}
-		myCalendar.clearMyDays(1);
+	//	myCalendar.clearMyDays(1);
 		Appointment monthPointer = myCalendar.getMonthAppointment("Mar");
-		Appointment dayPointer = myCalendar.getDayAppointment(1);
-		System.out.println(dayPointer);
+		//Appointment dayPointer = myCalendar.getDayAppointment(1);
+		//System.out.println(dayPointer);
 		while (monthPointer != null)
 		{
 			System.out.println(monthPointer.getDescription());
