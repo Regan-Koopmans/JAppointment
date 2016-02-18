@@ -23,6 +23,7 @@ public class Calendar
 		Appointment newAppointment = new Appointment(description,duration);
 		newAppointment.day = day;
 		newAppointment.month = month;
+		System.out.println(day + " " + month + " " + description);
 		Appointment monthPointer = getMonthAppointment(month);		
 
 		if (monthPointer == null)
@@ -81,7 +82,7 @@ public class Calendar
 			days[day] = newAppointment;
 			return;
 		}
-
+		System.out.println(convertToMonthEnum(dayPointer.month));
 		while (dayPointer.down != null && 
 convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 		{
