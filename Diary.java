@@ -58,21 +58,30 @@ public class Diary
 		int nameCounter = 0;
 		int fromName = 0;
 		
+		//System.out.println("Trace1");
 		
 		Calendar c = new Calendar();
 		
- 		String months[] = new String[]{"Feb","Mar","Apr","Jun","Aug"};
-		String names[] = new String[]{"A","B","C","D","E","F","G","H","I","J"};
+ 	//	String months[] = new String[]{"Feb","Mar","Apr","Jun","Aug"};
+	//	String names[] = new String[]{"A","B","C","D","E","F","G","H","I","J"};
 		
-		//1
+		//A-D
 		for(int j = 1; j < 4; ++j)
-			c.addAppointment(months[j], 3, names[nameCounter++], 4);
-		
+		{
+				c.addAppointment(months[j], 3, names[nameCounter++], 4);		
+		}
+
+		c.printTable();		
+
+		//E
 		c.addAppointment(months[5], 3, names[nameCounter++], 4);
 		
 		Appointment a = c.getAppointment(months[0],3);
+
+		c.printTable();
 		
-		
+		//First round of marking.
+
 		while(a!=null)
 		{
 			
@@ -87,7 +96,9 @@ public class Diary
 		
 		
 		a = c.getAppointment(months[3],3);
-		
+
+		c.printTable();		
+
 		while(a!=null)
 		{
 			mark+= compare(i,names[fromName++],a.getDescription(),mark);
@@ -99,6 +110,7 @@ public class Diary
 		for(int j = 0; j < 4; ++j)
 			c.addAppointment(months[7],15,names[nameCounter++],j+1);
 		
+		c.printTable();
 		
 		a = c.getAppointment(months[7],3);
 		
@@ -118,36 +130,14 @@ public class Diary
 	
 	public static void main(String[] args)
 	{
-		//Write code to test your implementation here.
-//		Calendar myCalendar = new Calendar();
-	//	myCalendar.addAppointment("Feb",1,"test",3);
-	//	myCalendar.addAppointment("Feb",3,"hbd",2);
-	//	myCalendar.addAppointment("Feb",2,"middle",4);
-//		myCalendar.addAppointment("Mar",3,"outer insert",1);
-	//	myCalendar.addAppointment("Mar",1,"working now",1);
-
-	//	myCalendar.addAppointment("Mar",2,"should still be here",1);
-	//	myCalendar.addAppointment("Jul",1,"neither should this",1);
-	
-		//Appointment monthPointer = myCalendar.getMonthAppointment("Feb");
-		//Appointment dayPointer = myCalendar.getDayAppointment(1);
-		//while (dayPointer != null)
-		//{
-		//	System.out.println(dayPointer.getDescription());
-		//	dayPointer = dayPointer.down;
-		//}
-	//	myCalendar.clearMyDays(1);
-	//	Appointment monthPointer = myCalendar.getMonthAppointment("Mar");
-		//Appointment dayPointer = myCalendar.getDayAppointment(1);
-		//System.out.println(dayPointer);
-	//	while (monthPointer != null)
-	////	{
-	//		System.out.println(monthPointer.getDescription());
-	//		monthPointer = monthPointer.right;
-	//	}
-		//myCalendar.deleteAppointment("Feb",3);
-		//int mark = Diary.trivialInserts(0);
-		Diary.advancedInserts();
+		Calendar c = new Calendar();
+		c.addAppointment("Jan",1,"A",2);
+	//	c.addAppointment("Feb",1,"C",2);
+		c.addAppointment("Jan",1,"B",2);
+		c.deleteAppointment("Jan",1,"B");
+		c.deleteAppointment("Jan",1);
+		c.printTable();		
+		c.printTableColumn();
 	}
 	
 	static String months[] = new String[]{"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};

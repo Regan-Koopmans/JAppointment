@@ -18,16 +18,17 @@ public class Calendar
 	public void addAppointment(String month, int day, String description, int duration)
 	{
 		/*Insert an appointment at the given month and day combination.  Intialize the appointment with the remainder of the parameters.
-		
+			
 		Duplicate appointments are allowed.*/
+		--day;
 		Appointment newAppointment = new Appointment(description,duration);
 		newAppointment.day = day;
 		newAppointment.month = month;
-		System.out.println(day + " " + month + " " + description);
 		Appointment monthPointer = getMonthAppointment(month);		
 
 		if (monthPointer == null)
 		{
+			System.out.println(convertToMonthEnum(month));
 			months[convertToMonthEnum(month)] = newAppointment;
 		}
 		else if (monthPointer.day > day) 
@@ -37,7 +38,6 @@ public class Calendar
 		}
 		else
 		{
-
 			while (monthPointer.right != null && monthPointer.right.day < day && monthPointer.day != day)
 			{
 				monthPointer = monthPointer.right;
@@ -54,12 +54,10 @@ public class Calendar
 			{
 				if (monthPointer.right == null)
 				{
-					//System.out.println("APPEND INSERT");
 					monthPointer.right = newAppointment;
 				}
 				else
 				{
-					//System.out.println("MIDDLE INSERT");
 					Appointment temp = monthPointer.right;
 					monthPointer.right = newAppointment;
 					newAppointment.right = temp;
@@ -75,27 +73,32 @@ public class Calendar
 			days[day] = newAppointment;
 			return;
 		}
-
-		if (newAppointment.day < dayPointer.day)
+		else if (convertToMonthEnum(newAppointment.month) < convertToMonthEnum(dayPointer.month))
 		{
 			newAppointment.down = dayPointer;
 			days[day] = newAppointment;
 			return;
 		}
-		System.out.println(convertToMonthEnum(dayPointer.month));
-		while (dayPointer.down != null && 
-convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
+		else
 		{
-			dayPointer = dayPointer.right;
+			while (dayPointer.down != null && 
+				convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month) && !dayPointer.month.equals(month))
+			{
+				dayPointer = dayPointer.down;
+			}
+
+			if (dayPointer.month.equals(month))
+			{
+				//dayPointer.down = newAppointment;
+				return;
+			}
+			else 
+			{
+				Appointment temp = dayPointer.down;
+				dayPointer.down = newAppointment;
+				newAppointment.down = temp;
+			}
 		}
-		if (dayPointer == null)
-		{
-			dayPointer = newAppointment;
-			return;
-		}
-		Appointment temp = dayPointer.down;
-		dayPointer.down = newAppointment;
-		newAppointment.down = temp;
 	}
 
 	public int convertToMonthEnum(String month)
@@ -135,16 +138,24 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	{
 		/*Delete the first appointment at the given month and day combination and return the deleted appointment.
 		If no such appointment exists, return null.*/
-	
-		Appointment appointmentPointer = getAppointment(month,day);
+		day--;
+		Appointment appointmentPointer = getAppointment(month,day+1);
 		Appointment monthPointer = getMonthAppointment(month);
-		Appointment dayPointer = getDayAppointment(day);
-		System.out.println(dayPointer);
+		Appointment dayPointer = getDayAppointment(day+1);
 		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
 		{
 			if (monthPointer == appointmentPointer)
 			{
-				System.out.println("howdy");
+				Appointment temp = monthPointer.right;
+				if (appointmentPointer.back != null)
+				{
+					months[convertToMonthEnum(month)] = appointmentPointer.back;
+					appointmentPointer.back.right = temp;		
+				}
+				else	
+				{
+					months[convertToMonthEnum(month)] = temp;
+				}
 			}
 			else 
 			{
@@ -154,23 +165,24 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	
 			if (dayPointer == appointmentPointer)
 			{
-				System.out.println("hey there!");
+				Appointment temp = appointmentPointer.down;
+				if (appointmentPointer.back != null)
+				{
+					days[day] = appointmentPointer.back;
+					days[day].down = temp;	
+				}
+				else
+				{
+					days[day] = temp;
+					
+				}
 			}
 			else 
 			{
-				while (dayPointer.down != appointmentPointer)
+				while (dayPointer.down != appointmentPointer && dayPointer != null)
 					dayPointer = dayPointer.down; 
 			}
 
-			
-			if (appointmentPointer.back != null)
-			{
-				Appointment temp = appointmentPointer;
-				appointmentPointer = appointmentPointer.back;
-				return temp;
-			}
-			dayPointer.down = dayPointer.down.down;
-			monthPointer.right = monthPointer.right.right;
 			return appointmentPointer;
 		}
 		return null;
@@ -178,67 +190,99 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 
 	public Appointment deleteAppointment(String month, int day, String description)
 	{
-		/*Delete the first appointment at the given month and day combination  with the description and return the deleted appointment.
-		If no such appointment exists, return null.*/
-		Appointment appointmentPointer = getAppointment(month,day);
+		day--;
+		Appointment appointmentPointer = getAppointment(month,day+1);
 		Appointment monthPointer = getMonthAppointment(month);
-		Appointment dayPointer = getDayAppointment(day);
-		System.out.println(dayPointer);
+		Appointment dayPointer = getDayAppointment(day+1);
 		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
 		{
-			if (monthPointer == appointmentPointer)
+			if (appointmentPointer.getDescription().equals(description))	
 			{
-				System.out.println("howdy");
+				if (appointmentPointer.back != null)
+				{
+					if (days[day] == appointmentPointer)
+					{
+						days[day] = appointmentPointer.back;
+						days[day].down = appointmentPointer.down;
+					}
+					else 
+					{
+						while (dayPointer.down != null && dayPointer.down != appointmentPointer)
+							dayPointer = dayPointer.down;
+						
+						if (dayPointer.down != null)
+							dayPointer.down = dayPointer.down.down;
+							
+					}
+
+					if (months[convertToMonthEnum(month)] == appointmentPointer)
+					{
+						months[convertToMonthEnum(month)] = appointmentPointer.back;
+						months[convertToMonthEnum(month)].right = appointmentPointer.right;
+					}
+					else 
+					{
+						while (monthPointer.right != null && monthPointer.right != appointmentPointer)
+							monthPointer = monthPointer.right;
+						
+						if (monthPointer.right != null)
+							monthPointer.right = monthPointer.right.right;
+					}
+				}
+				else 
+				{
+					if (days[day] == appointmentPointer)
+						days[day] = appointmentPointer.back;
+					if (months[convertToMonthEnum(month)] == appointmentPointer)
+						months[convertToMonthEnum(month)] = appointmentPointer.back;
+				}
+				return appointmentPointer;
 			}
 			else 
 			{
-				while (monthPointer.right != appointmentPointer)
-					monthPointer = monthPointer.right;				
+				while (appointmentPointer.back != null && 
+					!appointmentPointer.back.getDescription().equals(description))
+				{
+					System.out.println("Traverse");
+					appointmentPointer = appointmentPointer.back;
+				}
+				if (appointmentPointer.back != null)
+				{
+					Appointment temp = appointmentPointer.back;
+					appointmentPointer.back = appointmentPointer.back.back;
+					return temp;
+				}
 			}
-	
-			if (dayPointer == appointmentPointer)
-			{
-				System.out.println("hey there!");
-			}
-			else 
-			{
-				while (dayPointer.down != appointmentPointer)
-					dayPointer = dayPointer.down; 
-			}
-			
-			if (appointmentPointer.back != null)
-			{
-				Appointment temp = appointmentPointer;
-				appointmentPointer = appointmentPointer.back;
-				return temp;
-			}
-			dayPointer.down = dayPointer.down.down;
-			monthPointer.right = monthPointer.right.right;
-			return appointmentPointer;
 		}
 		return null;
 	}
 	
-	/*Clearing Methods*/
+
 	public void clearMyMonth(String month)
 	{
-		/*All appointements for the given month should be deleted.
-		If the month has no appointments, simply do nothing.*/
-
 		Appointment monthPointer = getMonthAppointment(month);
 		Appointment dayPointer = null;
 		for (int x = 0; x < 30; x++)
 		{
+			dayPointer = getDayAppointment(x+1);
 			if (dayPointer != null)
 			{
-				dayPointer = getDayAppointment(x);
-				while (dayPointer.down != null && dayPointer.down.month != month)
+				if (days[x].month == month)
 				{
-					dayPointer = dayPointer.down;		
+					System.out.println("This");
+					days[x] = days[x].down;	
 				}
-				if (dayPointer.down.month == month)
-					dayPointer.down = dayPointer.down.down;
-				 
+				else
+				{
+					dayPointer = getDayAppointment(x+1);
+				
+					while (dayPointer.down != null && dayPointer.down.month != month)
+					{
+						dayPointer = dayPointer.down;		
+					}
+					if (dayPointer.down.month == month)
+						dayPointer.down = dayPointer.down.down;
+				}
 			}
 		}
 		months[convertToMonthEnum(month)] = null;
@@ -246,8 +290,6 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	
 	public void clearMyDays(int day)
 	{
-		/*All appointements for the given day should be deleted.
-		If the day has no appointments, simply do nothing.*/
 		Appointment monthPointer = null;
 		Appointment dayPointer = getDayAppointment(day);
 		for (int x = 0; x < 12; x++)
@@ -255,7 +297,7 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 			monthPointer = months[x];
 			if (monthPointer != null)
 			{
-				if (monthPointer.day == day)
+				if (monthPointer.day == day-1)
 				{
 					months[x] = months[x].right;
 				}
@@ -270,6 +312,7 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 				}	
 			}
 		}
+		days[day-1] = null;
 	}
 
 	public void clearMyYear()
@@ -286,6 +329,7 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	public Appointment getAppointment(String month, int day)
 	{
 		/*Return the head appointment of the month and day combination.  If no such appointment exists, return null*/
+		day--;
 		Appointment monthAppointment = getMonthAppointment(month);
 		while (monthAppointment != null && monthAppointment.day != day)
 		{
@@ -299,9 +343,7 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	}
 	
 	public Appointment getMonthAppointment(String month)
-	{
-		/*Return the head appointment for the month passed as a parameter.
-		If no such appointment exists, return null*/
+	{	
 		Appointment monthAppointment = null;
 		switch (month)
 		{
@@ -335,11 +377,62 @@ convertToMonthEnum(dayPointer.down.month) < convertToMonthEnum(month))
 	
 	public Appointment getDayAppointment(int day)
 	{
-		if (day >= 0 && day < 32) 
-			return days[day];
+		if (day >= 1 && day <= 30) 
+			return days[day-1];
 		else 
 			return null;
 	}
+
+	public void printTable()
+	{
+		Appointment monthPointer = null;
+		System.out.println();	
+
+		for (int x = 0; x < 12; x++)
+		{
+			System.out.print(x + "\t");
+			monthPointer = months[x];
+				
+			for (int y = 0; y < 30; y++)
+			{
+				if (monthPointer != null && monthPointer.day == y)
+				{
+					System.out.print(monthPointer.getDescription());
+					monthPointer = monthPointer.right;
+				}
+				else 
+					System.out.print("-"); 
+			} 
+			System.out.println();
+		}
+		System.out.println();
+	}
+		
+	public void printTableColumn()
+	{
+		Appointment dayPointer = null;
+		System.out.println();
+	
+		for (int x = 0; x < 30; x++)
+		{
+			System.out.print(x+1 + "\t");
+			dayPointer = days[x];
+		
+			for (int y = 0; y < 12; y++)
+			{
+				if (dayPointer != null && convertToMonthEnum(dayPointer.month) == y)
+				{
+					System.out.print(dayPointer.getDescription());	
+					dayPointer = dayPointer.down;
+				}
+				else 
+					System.out.print("-");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+
 	Appointment [] days;
 	Appointment [] months;	
 }
