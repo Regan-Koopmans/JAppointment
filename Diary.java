@@ -269,6 +269,9 @@ public class Diary
         print(n);
  
         print(p);
+	
+				c.printTable();
+				c.printTableColumn();
  
         System.out.println();
         System.out.println("----------------- DELETE MAR 17 ------------------");
@@ -399,6 +402,9 @@ public class Diary
         print(n);
  
         print(p);
+
+
+				c.printTableColumn();
  
         System.out.println();
         System.out.println("----------------- clearMonth = MARCH ------------------");
@@ -421,6 +427,7 @@ public class Diary
  
         p = c.getAppointment("Dec",21);
  
+				c.printTableColumn();
         print(s); print(z); print(q); print(r); print(g); print(e); print(o);
         print(j); print(k); print(l); print(m); print(n); print(p);
  
@@ -439,8 +446,15 @@ public class Diary
  
         l = c.getAppointment("Sep",17);
         m = c.getAppointment("Sep",18);
-        print(s); print(z); print(r); print(g); print(e); print(j); print(k);
-        print(l); print(m);
+        print(s);
+ 				print(z); 
+				print(r); 
+				print(g); 
+				print(e); 
+				print(j); 
+				print(k);
+        print(l); 
+				print(m);
  
         System.out.println();
         System.out.println("----------------- getAppointment() ------------------");
@@ -476,6 +490,9 @@ public class Diary
  
         l = c.getAppointment("Sep",17);
         m = c.getAppointment("Sep",18);
+
+			//	c.printTable();
+			//	c.printTableColumn();
 
 	}	
 	

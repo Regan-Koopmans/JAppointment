@@ -9,7 +9,7 @@ public class Calendar
 {
 	public Calendar()
 	{
-		/*You may implement this constructor to suit your needs, or you may add additional constructors.  This is the constructor which will be used for marking*/ 
+		
 		days = new Appointment[30];
 		months = new Appointment[12];
 	}
@@ -153,19 +153,26 @@ public class Calendar
 		Appointment dayPointer = getDayAppointment(day);
 		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
 		{
+
+
+
+			//MONTH
+			/////////////////////////////////////////////////////////////////////////////
+
 			if (monthPointer == appointmentPointer)
 			{
 				Appointment temp = monthPointer.right;
 				if (appointmentPointer.back != null)
 				{
 					months[convertToMonthEnum(month)] = appointmentPointer.back;
-					appointmentPointer.back.right = temp;		
+					appointmentPointer.back.right = temp;	
+						
 				}
 				else	
 				{
 					months[convertToMonthEnum(month)] = temp;
 				}
-				return appointmentPointer;
+				//return appointmentPointer;
 			}
 			else 
 			{
@@ -173,7 +180,6 @@ public class Calendar
 				while (monthPointer.right != appointmentPointer)
 					monthPointer = monthPointer.right;	
 
-				
 				if (monthPointer.right != null && monthPointer.right.back != null)
 				{
 					Appointment temp = monthPointer.right.right;
@@ -184,26 +190,39 @@ public class Calendar
 				
 			}
 	
+			/////////////////////////////////////////////////////////////////////////////
+
 			if (dayPointer == appointmentPointer)
 			{
 				Appointment temp = appointmentPointer.down;
 				if (appointmentPointer.back != null)
 				{
 					days[day] = appointmentPointer.back;
-					days[day].down = temp;	
+					appointmentPointer.back.down = temp;
 				}
 				else
 				{
-					days[day] = temp;
+					days[day] = days[day].down;
 					
 				}
 			}
 			else 
 			{
-				while (dayPointer != null && dayPointer.down != appointmentPointer)
-					dayPointer = dayPointer.down; 
-			}
+				System.out.println("Deleting a day");
+				while (dayPointer.down != null && dayPointer.down != appointmentPointer)
+					dayPointer = dayPointer.down;
 
+				if (dayPointer.down != null && dayPointer.down.back != null)
+				{
+						Appointment dayTemp = dayPointer.down.down;
+						dayPointer.down = monthPointer;
+						dayPointer.down.down = dayTemp;
+				}
+				else if (dayPointer.down != null)
+					 dayPointer.down = dayPointer.down.down;
+ 
+			}
+		
 			return appointmentPointer;
 		}
 		return null;
@@ -253,18 +272,38 @@ public class Calendar
 				else 
 				{
 					
-					System.out.println("test");
 					if (days[day] == appointmentPointer)
-						days[day] = appointmentPointer.back;
-					if (months[convertToMonthEnum(month)] == appointmentPointer)
+					{
+						Appointment dayTemp = days[day].down;
 						if (appointmentPointer.back != null)
+						{
+							days[day] = appointmentPointer.back;
+							days[day].down = dayTemp;
+						}
+						else 
+						{
+								days[day] = days[day].down;
+						}
+					}
+					
+
+					if (months[convertToMonthEnum(month)] == appointmentPointer)
+					{
+						if (appointmentPointer.back != null)
+						{
+							Appointment monthTemp = months[convertToMonthEnum(month)].right;
 							months[convertToMonthEnum(month)] = appointmentPointer.back;
+							months[convertToMonthEnum(month)].right = monthTemp;
+						}
 						else months[convertToMonthEnum(month)] = appointmentPointer.right;
+					}
 					else 
 					{
-						System.out.println("test2");
 						while (appointmentPointer.back != null && !appointmentPointer.back.getDescription().equals(description))
 							appointmentPointer = appointmentPointer.back;
+
+						if (appointmentPointer.back != null)
+							appointmentPointer.back = appointmentPointer.back.back;
 					}
 					
 				}
@@ -291,6 +330,7 @@ public class Calendar
 
 	public void clearMyMonth(String month)
 	{
+		System.out.println(month);
 		Appointment monthPointer = getMonthAppointment(month);
 		Appointment dayPointer = null;
 		for (int x = 1; x < 31; x++)
@@ -298,20 +338,27 @@ public class Calendar
 			dayPointer = getDayAppointment(x);
 			if (dayPointer != null)
 			{
-				if (days[x-1].month == month)
+				System.out.println(dayPointer.day);
+				if (days[x-1].month.equals(month))
 				{
-					System.out.println("Changing first");
 					days[x-1] = days[x-1].down;	
 				}
 				else
 				{
-					while (dayPointer.down != null && dayPointer.down.month != month)
+					while (dayPointer.down != null && !dayPointer.down.month.equals(month))
 					{
+						//System.out.println("traverse");
 						dayPointer = dayPointer.down;		
 					}
-					if (dayPointer.down != null && dayPointer.down.month == month)
+					if (dayPointer.down != null && dayPointer.down.month.equals(month))
 					{
+						System.out.println(dayPointer.month + dayPointer.day);
 						dayPointer.down = dayPointer.down.down;
+						
+					}
+					else
+					{
+						System.out.println("Not found?");
 					}
 				}
 			}
@@ -366,7 +413,6 @@ public class Calendar
 	/*Query methods*/
 	public Appointment getAppointment(String month, int day)
 	{
-		/*Return the head appointment of the month and day combination.  If no such appointment exists, return null*/
 		day--;
 		Appointment monthAppointment = getMonthAppointment(month);
 		while (monthAppointment != null && monthAppointment.day != day)
