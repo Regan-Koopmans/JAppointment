@@ -293,27 +293,24 @@ public class Calendar
 	{
 		Appointment monthPointer = getMonthAppointment(month);
 		Appointment dayPointer = null;
-		for (int x = 0; x < 30; x++)
+		for (int x = 1; x < 31; x++)
 		{
-			dayPointer = getDayAppointment(x+1);
+			dayPointer = getDayAppointment(x);
 			if (dayPointer != null)
 			{
-				if (days[x].month == month)
+				if (days[x-1].month == month)
 				{
 					System.out.println("Changing first");
-					days[x] = days[x].down;	
+					days[x-1] = days[x-1].down;	
 				}
 				else
 				{
-					dayPointer = getDayAppointment(x+1);
-				
 					while (dayPointer.down != null && dayPointer.down.month != month)
 					{
 						dayPointer = dayPointer.down;		
 					}
 					if (dayPointer.down != null && dayPointer.down.month == month)
 					{
-						System.out.println(x+1 + dayPointer.month);
 						dayPointer.down = dayPointer.down.down;
 					}
 				}
@@ -331,19 +328,25 @@ public class Calendar
 			monthPointer = months[x];
 			if (monthPointer != null)
 			{
+				
 				if (monthPointer.day == day)
 				{
+					System.out.println("At begining of month");
 					months[x] = months[x].right;
 				}
 				else
 				{
-					while (monthPointer.right != null && monthPointer.right.day != day)
+
+					while (monthPointer.right != null && monthPointer.right.day != day-1)
 					{
+						System.out.println("traverse");
 						monthPointer = monthPointer.right;
 					} 
 					if (monthPointer.right != null)
+					{
+						System.out.println(monthPointer.day);
 						monthPointer.right = monthPointer.right.right;
-								
+					}			
 				}	
 			}
 		}

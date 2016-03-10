@@ -162,9 +162,6 @@ public class Diary
         print(d);
         print(cc);
 
-		c.printTable(); 
-		c.printTableColumn();
-
         System.out.println();
         System.out.println("----------------- INSERT FEBRUARY ------------------");
         c.addAppointment("Feb", 19, "February-19", 5);
@@ -312,8 +309,6 @@ public class Diary
         b = c.getAppointment("Mar",17);
  
         print(f); print(g); print(e); print(b);
-
-		c.printTable();
  
         System.out.println();
         System.out.println("----------------- DELETE FEB 17(2) ------------------");
@@ -324,7 +319,7 @@ public class Diary
 		System.out.println(g);
 
         print(g); print(e); print(b);
-		c.printTable();
+		
         //
  
         System.out.println();
