@@ -153,9 +153,6 @@ public class Calendar
 		Appointment dayPointer = getDayAppointment(day);
 		if (appointmentPointer != null && dayPointer != null && monthPointer != null)
 		{
-
-
-
 			//MONTH
 			/////////////////////////////////////////////////////////////////////////////
 
@@ -165,7 +162,7 @@ public class Calendar
 				if (appointmentPointer.back != null)
 				{
 					months[convertToMonthEnum(month)] = appointmentPointer.back;
-					appointmentPointer.back.right = temp;	
+					months[convertToMonthEnum(month)].right = temp;	
 						
 				}
 				else	
@@ -197,18 +194,17 @@ public class Calendar
 				Appointment temp = appointmentPointer.down;
 				if (appointmentPointer.back != null)
 				{
-					days[day] = appointmentPointer.back;
+					days[day-1] = appointmentPointer.back;
 					appointmentPointer.back.down = temp;
 				}
 				else
 				{
-					days[day] = days[day].down;
+					days[day-1] = days[day].down;
 					
 				}
 			}
 			else 
 			{
-				System.out.println("Deleting a day");
 				while (dayPointer.down != null && dayPointer.down != appointmentPointer)
 					dayPointer = dayPointer.down;
 
@@ -386,7 +382,7 @@ public class Calendar
 
 					while (monthPointer.right != null && monthPointer.right.day != day-1)
 					{
-						System.out.println("traverse");
+						//System.out.println("traverse");
 						monthPointer = monthPointer.right;
 					} 
 					if (monthPointer.right != null)
